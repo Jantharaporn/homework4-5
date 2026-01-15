@@ -4,106 +4,118 @@
 <meta charset="UTF-8">
 <title>โปรแกรมคำนวณส่วนลดร้านค้า</title>
 <style>
-    body{
-        font-family: "Segoe UI", Arial, sans-serif;
-        background: #f5e7a2;
-        color:#222;
-    }
-    .container{
-        width:440px;
-        margin:60px auto;
-        background:#ffffff;
-        padding:28px;
-        border-radius:10px;
-        border:1px solid #eae9d6;
-    }
-    h2{
-        text-align:center;
-        margin-bottom:22px;
-        color:#1f2a44;
-    }
-    label{
-        font-weight:600;
-        color:#1f2a44;
-    }
-    input[type=number], select{
-        width:100%;
-        padding:9px;
-        margin:6px 0 18px;
-        border:1px solid #52aeff;
-        border-radius:6px;
-        font-size:15px;
-        color:#222;
-    }
-    button{
-        width:100%;
-        padding:11px;
-        background:#4b5fd2;
-        border:none;
-        border-radius:6px;
-        color:#fff;
-        font-size:16px;
-        cursor:pointer;
-    }
-    button:hover{
-        background:#3f51c4;
-    }
-    .result{
-        margin-top:22px;
-        padding:16px;
-        background:#f7f9ff;
-        border-radius:8px;
-        border:1px solid #d6dbea;
-    }
-    .recommend{
-        margin-top:12px;
-        padding:12px;
-        background:#e9edff;
-        border:2px dashed #4b5fd2;
-        font-weight:700;
-        color:#1f2a44;
-        text-align:center;
-    }
-    .final-price{
-        margin-top:12px;
-        padding:10px;
-        background:#eae9d6;
-        border:1.5px solid #4b5fd2;
-        border-radius:8px;
-        text-align:center;
-        color:#1f2a44;
-        font-weight:700;
-        font-size:16px;
-    }
-    .final-price span{
-        font-size:18px;
-        color:#243b8a;
-    }
-    .error{
-        color:#b00020;
-        text-align:center;
-        font-weight:600;
-        margin-top:15px;
-    }
+body{
+    font-family: "Segoe UI", Arial, sans-serif;
+    background:#efe6a8;
+    color:#1e1e1e;
+}
+.wrapper{
+    width:460px;
+    margin:70px auto;
+}
+.header{
+    background:#243b8a;
+    color:#fff;
+    padding:18px;
+    border-radius:12px 12px 0 0;
+    text-align:center;
+    font-size:20px;
+    font-weight:700;
+}
+.card{
+    background:#ffffff;
+    padding:26px;
+    border-radius:0 0 12px 12px;
+    border:1px solid #dcdcdc;
+}
+label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:600;
+    color:#243b8a;
+}
+input[type=number], select{
+    width:100%;
+    padding:10px;
+    margin-bottom:18px;
+    border-radius:6px;
+    border:1px solid #8ea2ff;
+    font-size:15px;
+}
+button{
+    width:100%;
+    padding:12px;
+    background:#3f51c4;
+    color:#fff;
+    font-size:16px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+button:hover{
+    background:#3343b8;
+}
+.result{
+    margin-top:22px;
+    background:#f5f7ff;
+    padding:18px;
+    border-radius:10px;
+    border-left:5px solid #3f51c4;
+}
+.result p{
+    margin:6px 0;
+}
+.pay-box{
+    margin-top:14px;
+    background:#fffbe6;
+    padding:12px;
+    border-radius:8px;
+    text-align:center;
+    border:1px solid #3f51c4;
+}
+.pay-box .label{
+    font-size:14px;
+    font-weight:600;
+}
+.pay-box .price{
+    font-size:18px;
+    font-weight:700;
+    color:#243b8a;
+}
+.recommend{
+    margin-top:14px;
+    background:#fffbe6;
+    border:2px dashed #243b8a;
+    padding:12px;
+    text-align:center;
+    font-weight:700;
+}
+.error{
+    margin-top:15px;
+    color:#b00020;
+    font-weight:600;
+    text-align:center;
+}
 </style>
 </head>
 <body>
 
-<div class="container">
-<h2>โปรแกรมคำนวณส่วนลด</h2>
+<div class="wrapper">
+    <div class="header">โปรแกรมคำนวณส่วนลด</div>
 
-<form method="post">
-    <label>ยอดซื้อสินค้า (บาท)</label>
-    <input type="number" name="amount" step="0.01" required>
+    <div class="card">
+        <form method="post">
+            <label>ยอดซื้อสินค้า (บาท)</label>
+            <input type="number" name="amount" step="0.01" required>
 
-    <label>สถานะลูกค้า</label>
-    <select name="member">
-        <option value="no">ไม่เป็นสมาชิก</option>
-        <option value="yes">เป็นสมาชิก</option>
-    </select>
+            <label>สถานะลูกค้า</label>
+            <select name="member">
+                <option value="no">ไม่เป็นสมาชิก</option>
+                <option value="yes">เป็นสมาชิก</option>
+            </select>
 
-    <button type="submit">คำนวณ</button>
-</form>
+            <button type="submit">คำนวณส่วนลด</button>
+        </form>
 
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -112,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $member = $_POST["member"];
 
     if ($amount < 0) {
-        echo "<p class='error'>ยอดซื้อต้องไม่เป็นค่าติดลบ</p>";
+        echo "<div class='error'>ยอดซื้อต้องไม่เป็นค่าติดลบ</div>";
         exit;
     }
 
@@ -154,25 +166,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $net = $amount - $discount;
 
     echo "<div class='result'>";
-    echo "ยอดซื้อ: " . number_format($amount,2) . " บาท<br>";
+    echo "<p>ยอดซื้อ: <strong>" . number_format($amount,2) . "</strong> บาท</p>";
 
     if ($rate > 0) {
-        echo "ได้รับส่วนลดระดับ $level {$rate}%<br>";
+        echo "<p>ได้รับส่วนลดระดับ $level {$rate}%</p>";
     } else {
-        echo "ไม่ได้รับส่วนลด<br>";
+        echo "<p>ไม่ได้รับส่วนลด</p>";
     }
 
     if ($memberRate > 0) {
-        echo "ได้รับส่วนลดพิเศษสมาชิก +5%<br>";
+        echo "<p>ส่วนลดสมาชิก +5%</p>";
     }
 
     if ($totalRate > 0) {
-        echo "ส่วนลดที่ได้รับ: " . number_format($discount,2) . " บาท<br>";
+        echo "<p>ส่วนลดที่ได้รับ: " . number_format($discount,2) . " บาท</p>";
     }
 
-    echo "<div class='final-price'>
-            ราคาที่ต้องจ่าย<br>
-            <span>" . number_format($net,2) . " บาท</span>
+    echo "<div class='pay-box'>
+            <div class='label'>ราคาที่ต้องจ่าย</div>
+            <div class='price'>" . number_format($net,2) . " บาท</div>
           </div>";
 
     if ($nextTarget > 0 && $amount < 5000) {
@@ -186,7 +198,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "</div>";
 }
 ?>
-
+    </div>
 </div>
+
 </body>
 </html>
