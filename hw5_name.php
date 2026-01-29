@@ -6,30 +6,37 @@ if (!empty($_POST['fullname'])) {
     $fullname = trim($_POST['fullname']);
 
     $titles = [
-        // แบบเต็ม
         "เด็กหญิง","เด็กชาย","นางสาว","นาง","นาย",
-
-        // แบบย่อ
-        "ด.ญ.","ด.ช.","น.ส.",
-
-        // ยศ / ตำแหน่ง
+        "น.","ดช.","ด.ญ.","ดญ.","ด.ช.","น.ส.","มล.",
         "ร.ต.ต.","ร.ต.","ด.ต.",
         "ดร.","ผศ.","รศ.","ศ.",
-        "ม.ร.ว.","มรว."
+        "ม.ร.ว.","มรว.",
+        "ดช.ร.ต.ต.","ดญ.ร.ต.ต."
     ];
 
-    // เรียงจากยาวไปสั้น (กันชนกัน)
     usort($titles, function($a, $b){
         return mb_strlen($b) - mb_strlen($a);
     });
 
-    // แยกคำนำหน้า
-    foreach ($titles as $t) {
-        if (mb_strpos($fullname, $t) === 0) {
-            $title = $t;
-            $fullname = trim(mb_substr($fullname, mb_strlen($t)));
-            break;
+    // ===== 1) ใช้คำนำหน้าตาม list ของคุณก่อน =====
+    $found = true;
+    while ($found) {
+        $found = false;
+        foreach ($titles as $t) {
+            if (mb_strpos($fullname, $t) === 0) {
+                $title .= $t;
+                $fullname = mb_substr($fullname, mb_strlen($t));
+                $fullname = ltrim($fullname);
+                $found = true;
+                break;
+            }
         }
+    }
+
+    // ===== 2) ถ้ายังไม่เจอ แต่ขึ้นต้นด้วยอะไรที่ลงท้าย . ให้ถือเป็นคำนำหน้า =====
+    if ($title === '' && preg_match('/^((?:[ก-๙]+\.?)+\.)/u', $fullname, $m)) {
+        $title = $m[1];
+        $fullname = ltrim(mb_substr($fullname, mb_strlen($title)));
     }
 
     // แยกชื่อ - สกุล
@@ -38,6 +45,8 @@ if (!empty($_POST['fullname'])) {
     $lname = $parts[1] ?? "";
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
